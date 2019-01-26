@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/Interactive-Art-Website/precache-manifest.706191867eaf95fae312145b551e3ad9.js"
+  "/interactive-art/precache-manifest.ed86140ceb35d0518a6d117ac628a3d1.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/Interactive-Art-Website/index.html", {
+workbox.routing.registerNavigationRoute("/interactive-art/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
