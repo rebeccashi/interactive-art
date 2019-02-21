@@ -1,0 +1,54 @@
+*{
+  margin:0;
+  border:0;
+}
+
+html{
+  font-size:62.5%;
+}
+
+
+.canvas{
+  text-align: right;
+  padding-right: 20rem;
+  padding-top: 25rem;
+  /*padding:5rem;*/
+}
+
+.canvas-label {
+  font-size: 2rem;
+  /*font-family: 'Dancing Script', cursive;*/
+  font-family: 'Noto Serif TC', serif;
+  color: black;
+}
+
+.canvas-input{
+  font-size:2rem;
+  margin-top: 1rem;
+  text-align: center;
+  border:1px solid #E9E4F0; /*E9E4F0*/
+  border-radius: 0.5rem;
+  width: 35rem;
+  font-family: 'Noto Serif TC', serif;
+  background-color: inherit;
+  box-shadow: 1rem 1rem 2rem -0.5rem #A7A4AC;
+}
+
+.canvas-input:focus{
+  outline: none;
+}
+
+.word-count {
+  font-size: 1.2rem;
+}
+
+#clear {
+  background: #e7e7e7;
+  width: 15%;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  margin-right: 20%;
+  /*border: 1px solid #E9E4F0;*/
+  box-shadow: inset -0.5rem -0.5rem 1rem -0.5rem #A7A4AC;
+  font-family: 'Noto Serif TC', serif;
+}
