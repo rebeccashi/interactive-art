@@ -1,446 +1,300 @@
-import React  from 'react';
+import React, { Component } from 'react';
 import './App.css';
+import Canvas from './Canvas.js'
 
-class App extends React.Component{
-    constructor(props){
-        super(props)
-        this.state={
-            text:'',
-            word:'',
-            display: false,
-            colors: [],
-            count: 0,
-            top: 0,
-            left: 0
+//Debugging: why doesn't setState work for Generators?
+
+class App extends Component {
+  //if you want to modify state,use lifecycle method
+  componentDidMount() {
+    this.valuesGenerator(1000);
+    this.opacitiesGenerator(1000);
+  }
+
+  componentWillUnmount(){
+
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: '',
+      words: [],
+      colorLib: [
+        //{word: '', r: , g: , b: , o: 0},
+        {word: 'red', r: 255, g: 0, b: 0, o: 1},
+        {word: 'yellow', r: 255, g: 255, b: 0, o: 1},
+        {word: 'blue', r: 0, g: 0, b: 255, o: 1},
+        {word: 'green', r: 0, g: 255, b: 0, o: 1},
+        {word: 'purple', r: 255, g: 0, b: 255, o: 1},
+        {word: 'orange', r: 255, g: 103, b: 0, o: 0},
+        {word: 'gold', r: 255, g: 157, b: 0, o: 0},
+        {word: 'lavender', r: 178, g: 164, b: 212, o: 0},
+        {word: 'pink', r: 255, g: 105, b: 180, o: 0},
+        {word: 'muted', r: 183, g: 157, b: 148, o: 0},
+        {word: 'tangerine', r: 255, g: 111, b: 89, o: 0},
+        {word: 'cherry', r: 89, g: 0, b: 4, o: 0},
+        {word: 'peach', r: 255, g: 107, b: 107, o: 0},
+        {word: 'navy', r: 20, g: 36, b: 138, o: 0},
+        {word: 'apricot', r: 251, g: 206, b: 177, o: 0},
+        {word: 'sand', r: 197, g: 152, b: 73, o: 0},
+        {word: 'lemon', r: 241, g: 211, b: 2, o: 0},
+        {word: 'pale', r: 246, g: 226, b: 127, o: 0},
+
+        //common words
+        {word: 'sky', r: 53, g: 144, b: 243, o: 0},
+        {word: 'tea', r: 188, g: 211, b: 156, o: 0},
+        {word: 'forest', r: 9, g: 161, b: 41, o: 0},
+        {word: 'furniture', r: 135, g: 64, b: 0, o: 0},
+        {word: 'cat', r: 184, g: 51, b: 106},
+        {word: 'dog', r: 242, g: 100, b: 25},
+
+        //heavy connotations
+        {word: 'death', r: 40, g: 38, b: 44, o: 0},
+        {word: 'sex', r: 255, g: 44, b: 85, o: 0},
+        {word: 'ending', r: 0, g: 0, b: 0, o: 0},
+        {word: 'happy', r: 255, g: 119, b: 51, o: 0},
+        {word: 'good', r: 0, g: 206, b: 203, o: 0},
+        {word: 'bad', r: 84, g: 86, b: 119, o: 0},
+        {word: 'great', r: 72, g: 201, b: 58, o: 0},
+
+        //common
+        {word: 'nyu', r: 178, g: 164, b: 212, o: 0},
+        {word: 'stern', r: 170, g: 185, b: 207, o: 0},
+        {word: 'barbie', r: 218, g: 24, b: 132, o: 0},
+        {word: 'you', r: 104, g: 237, b: 198, o: 0},
+        {word: 'I', r: 222, g: 203, b: 183, o: 0},
+        {word: 'me', r: 184, g: 242, b: 230, o: 0},
+        {word: 'our', r: 137, g: 128, b: 245, o: 0},
+        {word: 'woman', r: 237, g: 92, b: 155, o: 0},
+        {word: 'female', r: 237, g: 92, b: 155, o: 0},
+        {word: 'women', r: 237, g: 92, b: 155, o: 0},
+        {word: 'male', r: 0, g: 72, b: 229, o: 0},
+        {word: 'man', r: 0, g: 72, b: 229, o: 0},
+        {word: 'men', r: 0, g: 72, b: 229, o: 0},
+        {word: 'she', r: 163, g: 193, b: 255, o: 0},
+        {word: 'he', r: 158, g: 188, b: 158, o: 0},
+        {word: 'together', r: 244, g: 172, b: 69, o: 0},
+        {word: 'was', r: 203, g: 191, b: 187, o: 0},
+        {word: 'can', r: 254, g: 78, b: 0, o: 0},
+        {word: 'no', r: 28, g: 49, b: 68, o: 0},
+        {word: 'people', r: 213, g: 185, b: 178, o: 0},
+        {word: 'make', r: 251, g: 97, b: 7, o: 0},
+        {word: 'forbidden', r: 0, g: 38, b: 38, o: 0},
+        {word: 'rouge', r: 163, g: 0, b: 21, o: 0},
+        {word: 'pickle', r: 178, g: 164, b: 212, o: 0},
+        {word: 'pool', r: 18, g: 234, b: 234, o: 0},
+        {word: 'chocolate', r: 46, g: 30, b: 15, o: 0},
+        {word: 'like', r: 73, g: 185, b: 255, o: 0},
+        {word: 'go', r: 90, g: 255, b: 21, o: 0},
+        {word: 'bread', r: 255, g: 191, b: 105, o: 0},
+        {word: 'denim', r: 10, g: 34, b: 157, o: 0},
+        {word: 'spring', r: 245, g: 206, b: 233, o: 0},
+        {word: 'hello', r: 255, g: 237, b: 102, o: 0},
+        {word: 'coffee', r: 111, g: 78, b: 55, o: 0},
+
+        //time
+        {word: 'time', r: 178, g: 164, b: 212, o: 0},
+        {word: 'now', r: 231, g: 119, b: 40, o: 0},
+        //{word: 'never', r: 178, g: 164, b: 212, o: 0},
+        //{word: 'forever', r: , g: , b: , o: 0},
+        //{word: 'if', r: , g: , b: , o: 0},
+        {word: 'tomorrow', r: 192, g: 218, b: 116, o: 0},
+        {word: 'morning', r: 255, g: 159, b: 28, o: 0},
+        {word: 'will', r: 78, g: 205, b: 196, o: 0},
+        {word: 'future', r: 137, g: 128, b: 245, o: 0},
+        //{word: '', r: , g: , b: , o: 0},
+
+        //names
+        {word: 'Rebecca', r: 223, g: 194, b: 242, o: 0},
+        {word: 'Gayatri', r: 240, g: 162, b: 2, o: 0},
+        {word: 'Taj', r: 88, g: 252, b: 236, o: 0},
+        {word: 'Victoria', r: 168, g: 180, b: 165, o: 0},
+        {word: 'Scarlett', r: 140, g: 0, b: 0, o: 0},
+        {word: 'Blake', r: 98, g: 191, b: 237, o: 0},
+        {word: 'Mom', r: 149, g: 113, b: 134, o: 0},
+        {word: 'Dad', r: 2, g: 103, b: 193, o: 0},
+        {word: 'Antoine', r: 255, g: 140, b: 97, o: 0},
+        {word: 'Aysha', r: 245, g: 235, b: 49, o: 0}
+
+
+      ],
+      displayedColors: [],
+      /*
+      box:[
+        {
+          top:l
         }
-        this.handleChange = this.handleChange.bind(this);
+      ]
+      generate new object and push it into box
+      */
+      tops: [],
+      lefts: [],
+      widths: [],
+      heights: [],
+      opacities: [],
+      opacityIndex: 0
+    };
+    this.textChangeHandler = this.textChangeHandler.bind(this);
+    //this.valuesGenerator(1000);
+    //this.opacitiesGenerator(1000);
+  }
+
+  valuesGenerator = (num) => {
+    var t = [];
+    var l = [];
+    var w = [];
+    var h = [];
+    for (var i = 0; i < num; i++) {
+      var random = Math.floor(Math.random(0,1) * 4);
+      if (random === 0) {
+        var width= Math.random(0,1) * 100;
+        var height= Math.random(0,1) * 400;
+        var top = Math.random(0,1) * 700;
+        var left = Math.random(0,1) * 1000;
+      }
+      if (random === 1) {
+        var width= Math.random(0,1) * 1000;
+        var height= Math.random(0,1) * 300;
+        var top = Math.random(0,1) * 500;
+        var left = Math.random(0,1) * 300;
+      }
+      if (random === 2) {
+        var width= Math.random(0,1) * 500;
+        var height= Math.random(0,1) * 200;
+        var top = 654 - Math.random(0,1) * 200;
+        var left = 1280 - Math.random(0,1) * 400;
+      }
+      if (random == 3) {
+        var width= Math.random(0,1) * 600;
+        var height= Math.random(0,1) * 50;
+        var top = 654 - Math.random(0,1) * 500;
+        var left = 1280- Math.random(0,1) * 600;
+      }
+      top = Math.floor(top);
+      left = Math.floor(left);
+      width = Math.floor(width);
+      height = Math.floor(height);
+      //console.log("window width: " + window.innerWidth)
+      //console.log("window height: " + window.innerHeight)
+      //console.log("top: "+ top)
+      //console.log("left: " + left)
+      //console.log("width: " + width)
+      //console.log("height: " + height)
+      t.push(top);
+      l.push(left);
+      w.push(width);
+      h.push(height);
     }
+    this.setState({tops: t});
+    //alert(this.state.tops.length);
+    this.setState({lefts: l});
+    //alert(this.state.lefts.length);
+    this.setState({widths: w});
+    this.setState({heights: h});
+  }
 
-    handleChange = (e) => {
-        var name = e.target.value
-        this.setState({text:name})
-        var ch = name.charAt(name.length-1)
-        var w = this.state.word
-        var random = Math.floor(Math.random(0,1) * 2)
-        var random2 = Math.floor(Math.random(0.1) * 2)
-        var opacity = 0.2 + Math.random(0, 1) * 0.8;
-        if (ch === ' ') {
-          if (name.charAt(name.length-2) !== ' ') {
-            this.setState({count: this.state.count+1})
-          }
-          var style = {
-           position:"absolute",
-           width: `${this.state.width}px`,
-           height: `${this.state.height}px`,
-           top:`${this.state.top}px`,
-           left:`${this.state.left}px`
-          }
+  opacitiesGenerator = (num) => {
+    var o = [];
+    for (var i = 0; i < num; i++) {
+      var random = 0.2 + Math.random(1) * 0.8;
+      o.push(random);
+    }
+    //alert(o.length);
+    this.setState({opacities: o});
+    //alert(this.state.opacities.length);
+  }
 
-          //myscreen: 1280 * 800
-          if (random === 0) {
-            if (random2 === 0) {
-              var width= Math.random(0,1) * 100;
-              var height= Math.random(0,1) * 1200;
-              var top = Math.random(0,1) * 700;
-              var left = Math.random(0,1) * 1000;
-            } else {
-              var width= Math.random(0,1) * 1000;
-              var height= Math.random(0,1) * 300;
-              var top = Math.random(0,1) * 500;
-              var left = Math.random(0,1) * 300;
-            }
-          }
-          if (random === 1) {
-            if (random2 === 0) {
-              var width= Math.random(0,1) * 500;
-              var height= Math.random(0,1) * 1000;
-              var top = 800 - Math.random(0,1) * 200;
-              var left = 1280 - Math.random(0,1) * 400;
-            } else {
-              var width= Math.random(0,1) * 600;
-              var height= Math.random(0,1) * 50;
-              var top = 800 - Math.random(0,1) * 500;
-              var left = 1280- Math.random(0,1) * 600;
-            }
-          }
+  textChangeHandler = (e) => {
+    var text = e.target.value;
+    this.setState({text: text});
+    //reconstruct the libary of words
+    var words = [];
+    var word = '';
+    for (var i = 0; i < text.length; i++) {
+      var ch = text.charAt(i);
+      var nextCh = text.charAt(i + 1);
+      if (ch !== ' ') {
+        word += ch;
+      } else if (ch === ' ' && nextCh !== ' ') {
+        words.push(word);
+        word = '';
+      }
+    }
+    //bug: continuous spaces produce a period for some reason
+    this.setState({words: words});
+    //find the new corresponding colors
+    this.findColors();
+  }
 
-          //actual colors
-          if(w.search(new RegExp('red', 'i')) !== -1){
-            style.background = `rgb(255,0,0,1)`;
-            if (random === 0) {
-              var width= Math.random(0,1) * 5;
-              var height = 700 + Math.random(0,1) * 300;
-            } else {
-              var height = Math.random(0,1) * 5;
-              var width = 500 + Math.random(0,1) * 300;
-            }
-          } else if (w.search(new RegExp('yellow', 'i')) !== -1){
-            style.background = `rgb(255,255,0,1)`;
-            if (random === 0) {
-              var width= Math.random(0,1) * 5;
-              var height = 700 + Math.random(0,1) * 300;
-            } else {
-              var height = Math.random(0,1) * 5;
-              var width = 500 + Math.random(0,1) * 300;
-            }
-          } else if (w.search(new RegExp('blue', 'i')) !== -1){
-            style.background = `rgb(0,0,255,1)`;
-            if (random === 0) {
-              var width= Math.random(0,1) * 5;
-              var height = 700 + Math.random(0,1) * 300;
-            } else {
-              var height = Math.random(0,1) * 5;
-              var width = 500 + Math.random(0,1) * 300;
-            }
-          } else if (w.search(new RegExp('green', 'i')) !== -1){
-            style.background = `rgb(0,255,0,1)`;
-            if (random === 0) {
-              var width= Math.random(0,1) * 5;
-              var height = 700 + Math.random(0,1) * 300;
-            } else {
-              var height = Math.random(0,1) * 5;
-              var width = 500 + Math.random(0,1) * 300;
-            }
-          } else if (w.search(new RegExp('purple', 'i')) !== -1){
-            style.background = `rgb(255,0,255,1)`;
-            if (random === 0) {
-              var width= Math.random(0,1) * 5;
-              var height = 700 + Math.random(0,1) * 300;
-            } else {
-              var height = Math.random(0,1) * 5;
-              var width = 500 + Math.random(0,1) * 300;
-            }
-          } else if (w.search(new RegExp('black','i')) !== -1){
-            style.background = `rgb(0,0,0,1)`;
-            if (random == 0) {
-              var width= Math.random(0,1) * 5;
-              var height = 900 + Math.random(0,1) * 300;
-            } else {
-              var height = Math.random(0,1) * 5;
-              var width = 500 + Math.random(0,1) * 300;
-            }
-        } else if (w.search(new RegExp('grey','i')) !== -1
-        || w.search(new RegExp('gray','i')) !== -1){
-          style.background = `#eeeeee`;
-          if (random == 0) {
-            var width= Math.random(0,1) * 5;
-            var height = 900 + Math.random(0,1) * 300;
+  findColors = () => {
+    let displayedColors = [];
+    const colorLib = this.state.colorLib;
+
+    //go through the words array, push the corresponding color to each word to displayedColors
+    //map function
+    var j = 0;
+    this.state.words.map((word, index) => {
+      let found = false;
+        //keeps track of the index of displayedColors
+      for (var i = 0; i < colorLib.length && !found; i++) {
+        if (word.localeCompare(colorLib[i].word, undefined,{sensitivity: 'base'}) == 0) {
+          found = true;
+          let color =  `rgb(${colorLib[i].r}, ${colorLib[i].g}, ${colorLib[i].b}, `;
+          if (colorLib[i].o === 1) {
+            color += "1)"
           } else {
-            var height = Math.random(0,1) * 5;
-            var width = 500 + Math.random(0,1) * 300;
+            color += `${this.state.opacities[j]})`;
+            j++;
           }
+          displayedColors.push(color);
         }
+      }
+    });
 
-        else if(w.search(new RegExp('Rebecca', 'i')) !== -1){
-          style.background = `rgb(223,194,242,${opacity})`;
-        } else if(w.search(new RegExp('Gayatri', 'i')) !== -1){
-          style.background = `rgb(240,162,2,${opacity})`;
-        } else if(w.search(new RegExp('Taj', 'i')) !== -1){
-          style.background = `rgb(88,252,236,${opacity})`;
-          //164, 176, 245
-        } else if(w.search(new RegExp('Victoria', 'i')) !== -1){
-          style.background = `rgb(168,180,165,${opacity})`;
-        } else if(w.search(new RegExp('Scarlett', 'i')) !== -1){
-          style.background = `rgb(255,0,255,${opacity})`;
-        } else if(w.search(new RegExp('Blake', 'i')) !== -1){
-          style.background = `rgb(98,191,237,${opacity})`;
-        } else if(w.search(new RegExp('Mom', 'i')) !== -1){
-          style.background = `rgb(149,113,134,${opacity})`;
-        } else if(w.search(new RegExp('Dad', 'i')) !== -1){
-          style.background = `rgb(2,103,193,${opacity})`;
-        } else if(w.search(new RegExp('Antoine', 'i')) !== -1){
-          style.background = `rgb(255,140,97,${opacity})`;
-        }
+    this.setState({displayedColors: displayedColors});
+    //console.log(this.state)
+  }
 
+  render(){
+    const colors = this.state.displayedColors.map((color, index) => {
+      return <Canvas
+        color = {color}
+        top = {this.state.tops[index]}
+        left = {this.state.lefts[index]}
+        width = {this.state.widths[index]}
+        height = {this.state.heights[index]}
+        key={index} />
+    });
 
-          //special words with heavy connotation
-          else if(w.search(new RegExp('death', 'i')) !== -1){
-            style.background = `rgb(40,38,44,${opacity})`;
-          } else if(w.search(new RegExp('sex', 'i')) !== -1){
-            //ff2c55
-            //rgb(255,44,85)
-            style.background = `rgb(165,1,4, ${opacity})`;
-          } else if(w.search(new RegExp('ending', 'i')) !== -1){
-            style.background = `rgb(255,0,255,${opacity})`;
-          } else if(w.search(new RegExp('happy', 'i')) !== -1){
-            style.background = `rgb(255,119,51,${opacity})`;
-          } else if(w.search(new RegExp('elegance', 'i')) !== -1){
-            style.background = `rgb(207,179,205,${opacity})`;
-          } else if(w.search(new RegExp('love', 'i')) !== -1){
-            style.background = `rgb(255,0,255,${opacity})`;
-          } else if(w.search(new RegExp('serenity', 'i')) !== -1){
-            style.background = `rgb(143,184,237,${opacity})`;
-          } else if(w.search(new RegExp('be', 'i')) !== -1){
-            style.background = `rgb(186,209,205,${opacity})`;
-            //desert crest
-          } else if(w.search(new RegExp('fresh', 'i')) !== -1){
-            style.background = `rgb(122,253,214,${opacity})`;
-          } else if(w.search(new RegExp('passion', 'i')) !== -1){
-            style.background = `rgb(208,0,0,${opacity})`;
-          } else if(w.search(new RegExp('evil', 'i')) !== -1){
-            style.background = `rgb(10,46,54,${opacity})`;
-            //very dark and cold green
-          } else if(w.search(new RegExp('home', 'i')) !== -1){
-            style.background = `rgb(255,191,105,${opacity})`;
-          } else if(w.search(new RegExp('light', 'i')) !== -1){
-            style.background = `rgb(224,186,215,${opacity})`;
-          } else if(w.search(new RegExp('spring', 'i')) !== -1){
-            style.background = `rgb(97,208,149,${opacity})`;
-          } else if(w.search(new RegExp('cute', 'i')) !== -1){
-            style.background = `rgb(238,66,102,${opacity})`;
-          } else if(w.search(new RegExp('sunlight', 'i')) !== -1){
-            style.background = `rgb(255,210,63,${opacity})`;
-          } else if(w.search(new RegExp('innocence', 'i')) !== -1
-          || w.search(new RegExp('innocent', 'i')) !== -1){
-            style.background = `rgb(242,183,158,${opacity})`;
-          } else if(w.search(new RegExp('evil', 'i')) !== -1){
-            style.background = `rgb(10,46,54,${opacity})`;
-          } else if(w.search(new RegExp('blood', 'i')) !== -1){
-            style.background = `rgb(224,54,22, ${opacity})`;
-          } else if(w.search(new RegExp('faded', 'i')) !== -1){
-            style.background = `rgb(168,188,161, ${opacity})`;
-          } else if(w.search(new RegExp('blood', 'i')) !== -1){
-            style.background = `rgb(224,54,22, ${opacity})`;
+    return (
+      <div className = "canvas">
 
-          } else if(w.search(new RegExp('maturity', 'i')) !== -1
-          ||w.search(new RegExp('mature', 'i')) !== -1){
-            style.background = `rgb(51,0,54, ${opacity})`;
-          } else if(w.search(new RegExp('hope', 'i')) !== -1
-          ||w.search(new RegExp('hopeful', 'i')) !== -1){
-            style.background = `rgb(166,87,174, ${opacity})`;
-          } else if(w.search(new RegExp('good', 'i')) !== -1){
-            style.background = `rgb(253,202,64, ${opacity})`;
-          } else if(w.search(new RegExp('opportunity', 'i')) !== -1){
-            style.background = `rgb(33,118,255, ${opacity})`;
-          } else if(w.search(new RegExp('female', 'i')) !== -1
-            || w.search(new RegExp('girl','i')) !== -1
-            || w.search(new RegExp('women', 'i')) !== -1) {
-            style.background = `rgb(255,15,128, ${opacity})`;
-          } else if(w.search(new RegExp('snake', 'i')) !== -1){
-            style.background = `rgb(38,64,39, ${opacity})`;
-          } else if(w.search(new RegExp('best', 'i')) !== -1){
-            style.background = `rgb(202,60,255, ${opacity})`;
-          } else if(w.search(new RegExp('hot', 'i')) !== -1){
-            style.background = `rgb(255,38,10, ${opacity})`;
-          } else if(w.search(new RegExp('cold', 'i')) !== -1){
-            style.background = `rgb(62,80,91, ${opacity})`;
-          } else if(w.search(new RegExp('hate', 'i')) !== -1){
-            style.background = `rgb(27,61,51, ${opacity})`;
-          } else if(w.search(new RegExp('domestic', 'i')) !== -1){
-            style.background = `rgb(239,176,161, ${opacity})`;
-          } else if(w.search(new RegExp('burn', 'i')) !== -1){
-            style.background = `rgb(91,15,0, ${opacity})`;
-          } else if(w.search(new RegExp('so', 'i')) !== -1){
-            //style.background = `rgb(239,176,161, ${opacity})`;
-          } else if(w.search(new RegExp('gross', 'i')) !== -1){
-            style.background = `rgb(81,90,71, ${opacity})`;
-          } else if(w.search(new RegExp('depress', 'i')) !== -1){
-            style.background = `rgb(43,45,66, ${opacity})`;
-          } else if(w.search(new RegExp('dark', 'i')) !== -1){
-            style.background = `rgb(17,21,28, ${opacity})`;
-          } else if(w.search(new RegExp('school', 'i')) !== -1){
-            style.background = `rgb(63,136,197, ${opacity})`;
-          } else if(w.search(new RegExp('proper', 'i')) !== -1){
-            //style.background = `rgb(63,136,197, ${opacity})`;
-          } else if(w.search(new RegExp('social', 'i')) !== -1
-            ||w.search(new RegExp('society', 'i')) !== -1){
-            style.background = `rgb(135,255,101, ${opacity})`;
-          } else if(w.search(new RegExp('crazy', 'i')) !== -1){
-            style.background = `rgb(244,68,46, ${opacity})`;
-          } else if(w.search(new RegExp('bright', 'i')) !== -1){
-            style.background = `rgb(248,243,43, ${opacity})`;
-          }
+        <div>
+          <label className='canvas-label'>
+            Start typing and see what happens...
+          </label>
+        </div>
 
-          else if(w.search(new RegExp('tired', 'i')) !== -1){
-            style.background = `rgb(109,76,61, ${opacity})`;
-          } else if(w.search(new RegExp('delirious', 'i')) !== -1){
-            style.background = `rgb(152,206,0, ${opacity})`;
-          } else if(w.search(new RegExp('high', 'i')) !== -1){
-            style.background = `rgb(213,242,0, ${opacity})`;
-          } else if(w.search(new RegExp('drunk', 'i')) !== -1){
-            style.background = `rgb(127,103,91, ${opacity})`;
-          } else if(w.search(new RegExp('excited', 'i')) !== -1){
-            //style.background = `rgb(109,76,61, ${opacity})`;
-          }
+        <textarea
+          type='text'
+          name='txt'
+          className='canvas-input'
+          value={this.state.text}
+          onChange={this.textChangeHandler}
+          placeholder=''
+          rows='5'
+        />
 
-
-          //Hogwarts
-          else if(w.search(new RegExp('gryffindor', 'i')) !== -1){
-            style.background = `rgb(127, 9, 9, 0.8)`;
-          }
-          else if(w.search(new RegExp('hufflepuff', 'i')) !== -1){
-            style.background = `rgb(196,146,44,0.8)`;
-          }
-          else if(w.search(new RegExp('slytherin', 'i')) !== -1){
-            style.background = `rgb(0,52,7,0.8)`;
-          }
-          else if(w.search(new RegExp('ravenclaw', 'i')) !== -1){
-            style.background = `rgb(45,111,196, 0.8)`;
-          }
-
-          //less common colors
-          else if(w.search(new RegExp('orange', 'i')) !== -1){
-            style.background = `rgb(255,103,0, ${opacity})`;
-          } else if(w.search(new RegExp('gold', 'i')) !== -1){
-            style.background = `rgb(255,157,0, ${opacity})`;
-          } else if(w.search(new RegExp('lavender', 'i')) !== -1){
-            style.background = `rgb(178,164,212, ${opacity})`;
-          } else if(w.search(new RegExp('pink', 'i')) !== -1){
-            style.background = `rgb(255,105,180, ${opacity})`;
-          } else if(w.search(new RegExp('muted', 'i')) !== -1){
-            style.background = `rgb(183,157,148, ${opacity})`;
-          } else if(w.search(new RegExp('tangerine', 'i')) !== -1){
-            style.background = `rgb(255,111,89, ${opacity})`;
-          } else if(w.search(new RegExp('cherry', 'i')) !== -1){
-            style.background = `rgb(89,0,4, ${opacity})`;
-          } else if(w.search(new RegExp('peach', 'i')) !== -1){
-            style.background = `rgb(255,107,107, ${opacity})`;
-          } else if(w.search(new RegExp('navy', 'i')) !== -1){
-            style.background = `rgb(20,36,138, ${opacity})`;
-          } else if(w.search(new RegExp('apricot', 'i')) !== -1){
-            style.background = `rgb(251,206,177, ${opacity})`;
-          } else if(w.search(new RegExp('sand', 'i')) !== -1){
-            style.background = `rgb(197,152,73, ${opacity})`;
-          } else if(w.search(new RegExp('lemon', 'i')) !== -1){
-            style.background = `rgb(241,211,2, ${opacity})`;
-          } else if(w.search(new RegExp('pale', 'i')) !== -1){
-            style.background = `rgb(246,226,127, ${opacity})`;
-          }
-          //INTERNET SLANG?
-
-          //COMMON words
-          else if(w.search(new RegExp('sky', 'i')) !== -1){
-            style.background = `rgb(53,144,243, ${opacity})`;
-          } else if(w.search(new RegExp('tea', 'i')) !== -1){
-            style.background = `rgb(188,211,156, ${opacity})`;
-          } else if(w.search(new RegExp('forest', 'i')) !== -1){
-            style.background = `rgb(9,161,41, ${opacity})`;
-          } else if(w.search(new RegExp('furniture', 'i')) !== -1){
-            style.background = `rgb(135,64,0, ${opacity})`;
-          }
-
-          //random
-          else if(w.search(new RegExp('nyu', 'i')) !== -1){
-            style.background = `rgb(178,164,212, ${opacity})`;
-          } else if(w.search(new RegExp('stern', 'i')) !== -1){
-            style.background = `rgb(170,185,207, ${opacity})`;
-          } else if(w.search(new RegExp('barbie', 'i')) !== -1){
-            style.background = `rgb(218,24,132, ${opacity})`;
-          } else if(w.search(new RegExp('you', 'i')) !== -1){
-            style.background = `rgb(104,237,198, ${opacity})`;
-          } else if(w.search(new RegExp('I', 'i')) !== -1 && w.length=== 1){
-            style.background = `rgb(222,203,183, ${opacity})`;
-          } else if(w.search(new RegExp('me', 'i')) !== -1){
-            style.background = `rgb(184,242,230, ${opacity})`;
-          } else if(w.search(new RegExp('our', 'i')) !== -1){
-              //style.background = `rgb(137,128,245, ${opacity})`;
-          } else if(w.search(new RegExp('woman', 'i')) !== -1
-          ||w.search(new RegExp('female', 'i')) !== -1
-          ||w.search(new RegExp('women', 'i')) !== -1){
-              style.background = `rgb(237,92,155, ${opacity})`;
-          } else if(w.search(new RegExp('men', 'i')) !== -1
-          ||w.search(new RegExp('male', 'i')) !== -1
-          ||w.search(new RegExp('man', 'i')) !== -1){
-              style.background = `rgb(0,72,229, ${opacity})`;
-          } else if(w.search(new RegExp('she', 'i')) !== -1){
-              style.background = `rgb(163,193,255, ${opacity})`;
-          } else if(w.search(new RegExp('he', 'i')) !== -1){
-              style.background = `rgb(158,188,158, ${opacity})`;
-          } else if(w.search(new RegExp('together', 'i')) !== -1){
-            style.background = `rgb(244,172,69, ${opacity})`;
-          } else if(w.search(new RegExp('was', 'i')) !== -1){
-            style.background = `rgb(203,191,187, ${opacity})`;
-          } else if(w.search(new RegExp('can', 'i')) !== -1){
-            style.background = `rgb(254,78,0, ${opacity})`;
-          } else if(w.search(new RegExp('no', 'i')) !== -1){
-            style.background = `rgb(28,49,68, ${opacity})`;
-          } else if(w.search(new RegExp('people', 'i')) !== -1){
-              style.background = `rgb(213,185,178, ${opacity})`;
-
-          } else if(w.search(new RegExp('make', 'i')) !== -1){
-              style.background = `rgb(251,97,7, ${opacity})`;
-          } else if(w.search(new RegExp('forbidden', 'i')) !== -1){
-              style.background = `rgb(0,38,38, ${opacity})`;
-          } else if(w.search(new RegExp('rouge', 'i')) !== -1){
-              style.background = `rgb(163,0,21, ${opacity})`;
-          } else if(w.search(new RegExp('pickle', 'i')) !== -1){
-              style.background = `rgb(178,164,212, ${opacity})`;
-          } else if(w.search(new RegExp('pool', 'i')) !== -1){
-              style.background = `rgb(18,234,234, ${opacity})`;
-          } else if(w.search(new RegExp('chocolate', 'i')) !== -1){
-              style.background = `rgb(46,30,15, ${opacity})`;
-          } else if(w.search(new RegExp('like', 'i')) !== -1){
-              style.background = `rgb(73,185,255, ${opacity})`;
-          } else if(w.search(new RegExp('go', 'i')) !== -1){
-              style.background = `rgb(90,255,21, ${opacity})`;
-          } else if(w.search(new RegExp('bread', 'i')) !== -1){
-              style.background = `rgb(255,191,105, ${opacity})`;
-          } else if(w.search(new RegExp('denim', 'i')) !== -1){
-              style.background = `rgb(10,54,157, ${opacity})`;
-          }
-          //time-related
-           else if(w.search(new RegExp('time', 'i')) !== -1){
-              style.background = `rgb(178,164,212, ${opacity})`;
-          } else if(w.search(new RegExp('now', 'i')) !== -1){
-              style.background = `rgb(231,119,40, ${opacity})`;
-
-          } else if(w.search(new RegExp('never', 'i')) !== -1){
-              style.background = `rgb(178,164,212, ${opacity})`;
-          } else if(w.search(new RegExp('forever', 'i')) !== -1){
-              style.background = `rgb(178,164,212, ${opacity})`;
-          } else if(w.search(new RegExp('if', 'i')) !== -1){
-              style.background = `rgb(178,164,212, ${opacity})`;
-          } else if(w.search(new RegExp('tomorrow', 'i')) !== -1){
-              style.background = `rgb(192,218,116, ${opacity})`;
-          } else if(w.search(new RegExp('morning', 'i')) !== -1){
-              style.background = `rgb(255,159,28, ${opacity})`;
-          } else if(w.search(new RegExp('will', 'i')) !== -1){
-              style.background = `rgb(78,205,196, ${opacity})`;
-          } else if(w.search(new RegExp('future', 'i')) !== -1){
-              style.background = `rgb(137,128,245, ${opacity})`;
-          }
-
-          if (top + height > 800) {
-            height = 650-top;
-          }
-          if (left + width > 1024) {
-            width = 1024-left;
-          }
-
-          this.setState({top:top,left:left,width: width, height:height, word:''})
-
-          this.setState((prevState)=>{
-            return {
-              colors: prevState.colors.concat(style)
-            }
-          })
-          this.setState({display:true})
-        } else {
-          w += ch
-          this.setState({word: w});
-        }
-    }
-
-    /*
-    clearText = () => {
-      this.setState({text:null})
-    }
-    */
-
-    render(){
-      return <div className='canvas'>
-        {this.state.colors.map((color,key) => {
-          return <div key={key} style={color}></div>
-        })}
-        <div><label className='canvas-label'>Start typing and see what happens...</label></div>
-        <textarea type='text'name='txt' className='canvas-input' value={this.state.text}
-        onChange={this.handleChange} placeholder='' rows='5'/>
-        <div><label className='word-count'>Word Count: {this.state.count}</label></div>
-
+        <div>
+          <label className='word-count'>
+            Word Count: {this.state.words.length}
+          </label>
+        </div>
+        {colors}
       </div>
-    }
+    );
+  }
 }
-  //<button onClick={this.clearText}id='clear'>Clear</button>
-
 
 export default App;

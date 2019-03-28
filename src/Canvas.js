@@ -1,7 +1,17 @@
+import React from "react";
 
-import React from "react"
-function Canvas(props) {
-  return <div style={props.style}></div>
+const canvas = (props) => {
+  let style = {
+    backgroundColor: `${props.color}`,
+    position:"absolute",
+    top:`${props.top}px`,
+    left:`${props.left}px`,
+    width: `${props.width}px`,
+    height: `${props.height}px`
+  };
+  console.log(style)
+  return <div style={style}></div>
+  //return <div></div>
 }
 
-export default Canvas;
+export default canvas;
